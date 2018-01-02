@@ -32,15 +32,15 @@ public class ListViewModel extends ViewModel{
     }
 
 
-    LiveData<List<Repo>> getRepos(){
+    public LiveData<List<Repo>> getRepos(){
         return repos;
     }
 
-    LiveData<Boolean> getError(){
+    public LiveData<Boolean> getError(){
         return repoLoadError;
     }
 
-    LiveData<Boolean> getLoading(){
+    public LiveData<Boolean> getLoading(){
         return loading;
     }
 

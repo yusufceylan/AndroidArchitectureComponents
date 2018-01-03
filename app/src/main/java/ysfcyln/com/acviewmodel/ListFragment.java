@@ -5,6 +5,8 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +19,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import ysfcyln.com.acviewmodel.home.ListViewModel;
+import ysfcyln.com.acviewmodel.home.RepoListAdapter;
 import ysfcyln.com.acviewmodel.model.Repo;
 
 /**
@@ -51,6 +54,12 @@ public class ListFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         // super.onViewCreated(view, savedInstanceState);
         viewModel = ViewModelProviders.of(this).get(ListViewModel.class);
+
+        // Set recyclerview
+        listView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
+        listView.setAdapter(new RepoListAdapter(viewModel, this));
+        listView.setLayoutManager(new LinearLayoutManager(getContext()));
+
         // listen live data objects exposed by our view model
         observeViewModel();
     }

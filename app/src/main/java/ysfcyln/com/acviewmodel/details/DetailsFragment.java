@@ -1,5 +1,6 @@
 package ysfcyln.com.acviewmodel.details;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -12,6 +13,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import ysfcyln.com.acviewmodel.R;
+import ysfcyln.com.acviewmodel.home.SelectedRepoViewModel;
 
 /**
  * Created by Yusuf on 03.01.2018.
@@ -49,7 +51,13 @@ public class DetailsFragment extends Fragment {
 
     // it shows single repo
     private void displayRepo() {
-
+        SelectedRepoViewModel selectedRepoViewModel = ViewModelProviders.of(getActivity()).get(SelectedRepoViewModel.class);
+        selectedRepoViewModel.getSelectedRepo().observe(this, repo -> {
+            repoNameTextView.setText(repo.name);
+            repoDescriptionTextView.setText(repo.description);
+            forksTextView.setText(String.valueOf(repo.forks));
+            starsTextView.setText(String.valueOf(repo.stars));
+        });
     }
 
     @Override

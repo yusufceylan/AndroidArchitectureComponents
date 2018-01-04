@@ -18,15 +18,18 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import ysfcyln.com.acviewmodel.details.DetailsFragment;
 import ysfcyln.com.acviewmodel.home.ListViewModel;
 import ysfcyln.com.acviewmodel.home.RepoListAdapter;
+import ysfcyln.com.acviewmodel.home.RepoSelectedListener;
+import ysfcyln.com.acviewmodel.home.SelectedRepoViewModel;
 import ysfcyln.com.acviewmodel.model.Repo;
 
 /**
  * Created by Yusuf on 01.01.2018.
  */
 
-public class ListFragment extends Fragment {
+public class ListFragment extends Fragment implements RepoSelectedListener {
 
     @BindView(R.id.recycler_view)
     RecyclerView listView;
@@ -57,11 +60,25 @@ public class ListFragment extends Fragment {
 
         // Set recyclerview
         listView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
-        listView.setAdapter(new RepoListAdapter(viewModel, this));
+        listView.setAdapter(new RepoListAdapter(viewModel, this, this));
         listView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         // listen live data objects exposed by our view model
         observeViewModel();
+    }
+
+    // Interface method for selecting repo
+    @Override
+    public void onRepoSelected(Repo repo) {
+        // We pass Activity rather than fragment because it makes this model scoped activity
+        // rather than fragment so we can access one view model with multiple fragments
+        SelectedRepoViewModel selectedRepoViewModel = ViewModelProviders.of(getActivity()).get(SelectedRepoViewModel.class);
+        selectedRepoViewModel.setSelectedRepo(repo);
+        // Push to new details screen
+        getActivity().getSupportFragmentManager().beginTransaction()
+                .replace(R.id.screen_container, new DetailsFragment())
+                .addToBackStack(null)
+                .commit();
     }
 
 

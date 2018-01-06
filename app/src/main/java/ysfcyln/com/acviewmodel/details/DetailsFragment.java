@@ -34,6 +34,7 @@ public class DetailsFragment extends Fragment {
     TextView starsTextView;
 
     private Unbinder unbinder;
+    private SelectedRepoViewModel selectedRepoViewModel;
 
     @Nullable
     @Override
@@ -46,12 +47,19 @@ public class DetailsFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         // super.onViewCreated(view, savedInstanceState);
+        selectedRepoViewModel = ViewModelProviders.of(getActivity()).get(SelectedRepoViewModel.class);
+        selectedRepoViewModel.restoreFromBundle(savedInstanceState);
         displayRepo();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        selectedRepoViewModel.saveToBundle(outState);
     }
 
     // it shows single repo
     private void displayRepo() {
-        SelectedRepoViewModel selectedRepoViewModel = ViewModelProviders.of(getActivity()).get(SelectedRepoViewModel.class);
         selectedRepoViewModel.getSelectedRepo().observe(this, repo -> {
             repoNameTextView.setText(repo.name);
             repoDescriptionTextView.setText(repo.description);
